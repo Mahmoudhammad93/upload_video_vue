@@ -1,0 +1,92 @@
+<section class="file-upload">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Upload Video</h4>
+      <div class="video_upload">
+        <label class="video_label" for="video-file">
+          <i class="fa fa-upload"></i>
+          <span>Upload File</span>
+          <div id="myProgress" class="container" v-if="onLoad">
+            <div v-for="video in videos">
+              <div class="file-info">
+                <h5>{{ video.name }}</h5>
+              </div>
+              <div class="w3-border">
+                <div
+                  class="w3-success"
+                  :style="{width: progress[video.name] + '%'}"
+                  style="
+                    height: 24px;
+                    background-color: green;
+                    color: #fff;
+                    font-weight: bold;
+                  "
+                >
+                  <span style="color: #fff">{{ progress[video.name] }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+        <div class="form" v-if="show">
+          <div class="form-control">
+            <input type="text" class="title" name="title" v-model="video.title" placeholder="Video Title">
+          </div>
+          <div class="form-control">
+            <input type="color" class="color" name="color" v-model="video.color" @change="getColor()">
+          </div>
+          <button class="btn-submit" @click="addTitle()">Save</button>
+        </div>
+        <a href="" class="show-form-btn" v-if="this.video" @click.prevent="showForm()">{{(show)?'Hide':'Show'}} Form {{(!show)?'To Add Title And Change Text Color':''}}</a>
+        <input
+          @change="upload"
+          ref="videos"
+          type="file"
+          id="video-file"
+          class="dropify"
+          multiple
+        />
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="videos" v-if="video">
+      <h4 class="card-title" v-if="video.title">Video Title : <span :style="{color: this.video.color}">{{video.title}}</span></h4>
+      <vue-plyr>
+        <video
+          :src="`${videos_path}/${video.file_name}`"
+          :type="video.type"
+          data-poster="poster.jpg"
+          id="current-video"
+        >
+          <source
+            size="720"
+            :src="`${videos_path}/${video.file_name}`"
+            :type="video.type"
+            id="current-source"
+          />
+          <track
+            kind="captions"
+            label="English captions"
+            :src="`${videos_path}/${video.file_name}`"
+            srclang="en"
+          />
+        </video>
+      </vue-plyr>
+    </div>
+  </div>
+  <!-- <div class="videos" v-for="video in videos">
+    <div id="video" v-if="video.type == 'video/mp4'">
+      <video width="320" height="240" autoplay>
+        <source :src="`localhost:8000/storage/units/${video.file_name}`" :type="video.type" />
+
+        <source :src="`localhost:8000/storage/units/${video.file_name}`" type="video/ogg" />
+
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div v-else id="image">
+      <img :src="`localhost:8000/storage/units/${video.file_name}`" :alt="video.name" />
+    </div>
+  </div> -->
+</section>
